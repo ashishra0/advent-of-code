@@ -59,6 +59,27 @@ func readFile() string {
 	return ""
 }
 
+func partOne(groups [][]int) []int {
+	var invalidNumbers []int
+
+	for _, group := range groups {
+		for _, number := range group {
+			s := strconv.Itoa(number)
+			length := len(s)
+			if length%2 != 0 {
+				continue
+			}
+
+			half := length / 2
+			if s[:half] == s[half:] {
+				invalidNumbers = append(invalidNumbers, number)
+			}
+		}
+	}
+
+	return invalidNumbers
+}
+
 func main() {
 	line := readFile()
 
@@ -69,5 +90,11 @@ func main() {
 		log.Fatalf("Error expanding ranges: %v", err)
 	}
 
-	fmt.Println(groups)
+	invalidNumbers := partOne(groups)
+	//sum the invalid numbers
+	sum := 0
+	for _, number := range invalidNumbers {
+		sum += number
+	}
+	fmt.Println(sum)
 }
