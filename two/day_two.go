@@ -80,6 +80,29 @@ func partOne(groups [][]int) []int {
 	return invalidNumbers
 }
 
+func partTwo(groups [][]int) []int {
+	var invalidNumbers []int
+	for _, group := range groups {
+		for _, number := range group {
+			s := strconv.Itoa(number)
+			length := len(s)
+			for patternLen := 1; patternLen <= length/2; patternLen++ {
+				if length%patternLen != 0 {
+					continue
+				}
+				pattern := s[:patternLen]
+				repetitions := length / patternLen
+				repeated := strings.Repeat(pattern, repetitions)
+				if repeated == s {
+					invalidNumbers = append(invalidNumbers, number)
+					break
+				}
+			}
+		}
+	}
+	return invalidNumbers
+}
+
 func main() {
 	line := readFile()
 
@@ -90,11 +113,18 @@ func main() {
 		log.Fatalf("Error expanding ranges: %v", err)
 	}
 
-	invalidNumbers := partOne(groups)
-	//sum the invalid numbers
-	sum := 0
-	for _, number := range invalidNumbers {
-		sum += number
+	invalidNumbersOne := partOne(groups)
+	invalidNumbersTwo := partTwo(groups)
+
+	sumOne := 0
+	for _, number := range invalidNumbersOne {
+		sumOne += number
 	}
-	fmt.Println(sum)
+	fmt.Println(sumOne)
+
+	sumTwo := 0
+	for _, number := range invalidNumbersTwo {
+		sumTwo += number
+	}
+	fmt.Println(sumTwo)
 }
